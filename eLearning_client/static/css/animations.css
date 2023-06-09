@@ -1,0 +1,61 @@
+/* a bunch of animations */
+
+@keyframes introduceElement{
+    0%{ transform: translateX(100vw); }
+    100%{  transform: translateX(0vw); }
+}
+
+@keyframes withdrawElement{
+    0%{ transform: translateX(0); }
+    100%{  transform: translateX(-100vw); }
+}
+
+@keyframes restoreElement{
+    0%{ transform: translateX(-100vw); }
+    100%{  transform: translateX(0vw);}
+}
+
+@keyframes withdrawIntroduced{
+    0%{ transform: translateX(0); }
+    100%{  transform: translateX(100vw); }
+}
+
+@keyframes introduceFromBottom{
+    0%{ transform: translateY(100vh); }
+    100%{  transform: translateY(0); }
+}
+
+@keyframes withdrawToTop{
+    0%{ transform: translateY(0); }
+    100%{  transform: translateY(-100vh); }
+}
+
+@keyframes withdrawToBottom{
+    0%{ transform: translateY(0); }
+    100%{  transform: translateY(100vh); }
+}
+
+@keyframes restoreFromTop{
+    0%{ transform: translateY(-100vh); }
+    100%{  transform: translateY(0); }
+}
+
+@keyframes btnHalo{
+    0%{box-shadow: 0 0 0.2rem #FFE4FA;}
+    50%{box-shadow: 0 0 3rem #FFE4FA;}
+    100%{box-shadow: 0 0 0.2rem #FFE4FA;}
+}
+
+@keyframes shakeRight{
+    0%{transform: translateX(0);}
+    25%{transform: translateX(2rem)}
+    75%{transform: translateX(-2rem);}
+    100%{transform: translateX(0);}
+}
+
+@keyframes shakeLeft{
+    0%{transform: translateX(0);}
+    25%{transform: translateX(-2rem)}
+    75%{transform: translateX(2rem);}
+    100%{transform: translateX(0);}
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/static/js/scripts.js"></script>
+    <title>Create a course</title>
+</head>
+<body class="create_page" onload="displayUPLDfileName(); hideLoader()">
+    {% include "[fragment]nav_bar.html" %}
+    {% include "[fragment]loading.html" %}
+    <main>
+        <div class="course_add_section">
+            <h1>{{ localization['addCourse_title'] }}</h1>
+            <form class="flex_col" method="post" enctype="multipart/form-data">
+                <input type="text" name="course_name" style='font-size: 20px;' placeholder="{{ localization['addCourse_cName'] }}" required>
+                <select name="course_domain" required>
+                    <option value="">{{ localization['course_domain_placeholder'] }} ...</option>
+                    <option value="it">{{ localization['course_domain_IT'] }}</option>
+                    <option value="design">{{ localization['course_domain_Design'] }}</option>
+                    <option value="3d">{{ localization['course_domain_3D'] }}</option> 
+                </select>
+                <textarea name="course_description" cols="60" rows="10" placeholder="{{ localization['addCourse_description'] }}" maxlength="1000" required></textarea>
+                <textarea name="course_requirements" cols="60" rows="5" placeholder="{{ localization['addCourse_requirements'] }}" maxlength="1000"></textarea>
+                <label for="upload_course_img" id="upload_course_img_lbl">
+                    <i class="fa fa-cloud-upload" aria-hidden="true"></i>   {{ localization['addCourse_thumbnail'] }}</label>
+                <input id='upload_course_img' type="file" name="course_thumbnail">
+                <input type="submit" value="{{ localization['btn_create'] }}">
+            </form>
+        </div>
+    </main>
+    
+</body>
+</html>
+    
+    

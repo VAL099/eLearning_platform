@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set language</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/scripts.js"></script>
+</head>
+<body class="landing_page flex_row flex_centered">
+    <div class="landing_form flex_col flex_centered">  
+        <h1 style="height: 50px;"></h1>
+        <form method="post" class="flex_col" action="/set_lang">
+            <br> <br> <br>
+            <select name="language" required>
+                <option value="">???</option>
+                <option value="en">English</option>
+                <option value="ro">Română</option>
+                <option value="ru">Русский</option>
+                <!-- <option value="cn">中文</option> -->
+            </select>
+            <input type="submit" value="&LongRightArrow;">
+        </form>
+    </div>
+
+    <style>
+        option[value='None']{text-align: center;}
+        .cursor {animation: fade 0.7s ease infinite}
+        @keyframes fade { 0%{opacity: 0;} 50%{opacity: 1;} 100%{opacity: 0;} }
+    </style>
+
+<script>
+    var i = 0;
+    var h1_content = ['Please choose a display language!',
+                    'Vă rugăm să alegeți o limbă de afișare!',
+                    'Пожалуйста, выберите язык отображения!' ]
+    var textContainer = document.querySelector('h1');
+    var currentText = '';
+    var isDeleting = false;
+    var typingSpeed = 60;
+
+    var cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    cursor.textContent = '|';
+    
+    function type() {
+        if (i === h1_content.length) {
+            i = 0;
+        }
+        var text = h1_content[i];
+        if (isDeleting) {
+            currentText = text.substring(0, currentText.length - 1);
+            typingSpeed = 60
+        } else {
+            currentText = text.substring(0, currentText.length + 1);
+        }
+        textContainer.textContent = currentText;
+
+        if (!isDeleting && currentText === text) {
+            isDeleting = true;
+            typingSpeed = 2000;
+        } else if (isDeleting && currentText === '') {
+            isDeleting = false;
+            i++;
+            typingSpeed = 60;
+        }
+        setTimeout(type, typingSpeed);
+        textContainer.appendChild(cursor);
+    }
+    
+    type();
+</script>
+    <!-- <script>
+        var i = 1;
+        var h1_content = ['Please choose a display language!',
+                        'Vă rugăm să alegeți o limbă de afișare!', 
+                        'Пожалуйста, выберите язык отображения!']
+        var textContainer = document.querySelector('h1');
+        textContainer.textContent = h1_content[0]
+        setInterval(function(){
+            console.log(i)
+            textContainer.textContent = h1_content[i]
+            if (i === 2) {i = 0} else {i++}
+        }, 3000)
+    </script> -->
+</body>
+</html>

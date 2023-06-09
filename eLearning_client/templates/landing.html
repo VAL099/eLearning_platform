@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing...</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/scripts.js"></script>
+</head>
+<body class="landing_page flex_row flex_centered" onload="showInterestsMenu(); changeLandingForms(); registerPasswordCheck(); hideLoader()">
+    <!-- LOGIN -->
+    <div class="landing_form flex_col flex_centered">  
+        <h1>{{ localization['landing_welcome'] }}</h1>
+        <span style="padding-bottom: 4rem;">{{ localization['landing_first_msg'] }}</span>
+        <form method="post" class="flex_col" action="/login">
+            <input type="text" name="uname" placeholder="{{ localization['landing_uname'] }}" required>
+            <input type="password" name="pswd" placeholder="{{ localization['landing_password'] }}" required>
+            <a role="button" id="forgotPswd">{{ localization['landing_second_msg'] }}</a>
+            <input type="submit" value="{{ localization['landing_login'] }}" id="login">
+            <br>
+            <span>{{ localization['landing_third_msg'] }}<a role="button" id="gotoRegister">{{ localization['action_register'] }}</a></span>
+            <span class="errMsg" style="color:#ff2800;">{{message}}</span> 
+        </form>
+        <button onclick="window.location.href ='/select_language' "><i class="fa fa-language" aria-hidden="true"></i></button>
+    </div>
+    
+    <!-- REGISTER -->
+    <div class="landing_form flex_col flex_centered" style="display: none;">  
+        <h1>{{ localization['landing_welcome2'] }}</h1>
+        <span style="padding-bottom: 4rem;">{{ localization['landing_fifth_msg'] }}</span>
+        <form method="post" class="flex_col" action="/register" id="regForm">
+            <input type="text" name="uname" placeholder="{{ localization['landing_uname'] }}" required>
+            <input type="text" name="name" placeholder="{{ localization['landing_name'] }}" required>
+            <input type="email" name="email" placeholder="{{ localization['landing_mail'] }}" required>
+            <input type="password" name="pswd" placeholder="{{ localization['landing_password'] }}" required>
+            <input type="password" name="re_pswd" placeholder="{{ localization['landing_repassword'] }}" required>
+
+            <select id="userIdenitiy" name="identity" required>
+                <option value="plain">{{ localization['landing_who'] }}</option>
+                <option value="student">{{ localization['landing_student'] }}</option>
+                <option value="teacher">{{ localization['landing_teacher'] }}</option>
+            </select>
+
+            <select id="userInterest" name="interest" style="display: none;" required>
+                <option value="plain">{{ localization['landing_interest'] }}</option>
+                <option value="it">{{ localization['course_domain_IT'] }}</option>
+                <option value="design">{{ localization['course_domain_Design'] }}</option>
+                <option value="3d">{{ localization['course_domain_3D'] }}</option>
+                <option value="other">{{ localization['landing_interest_other'] }}</option>
+            </select>   
+
+            <input type="submit" value="{{ localization['landing_register'] }}"> <br>
+            <span>{{ localization['landing_fourth_msg'] }}<a role="button" id="returnToLoginPage">{{ localization['action_login'] }}</a></span>
+            <span class="errMsg" style="color:#ff2800;"></span>
+        </form>
+    </div>
+    {% include "[fragment]loading.html" %}
+    <script src="https://use.fontawesome.com/1e11ac9f29.js"></script>
+</body>
+</html>

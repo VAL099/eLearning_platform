@@ -1,0 +1,100 @@
+<header>
+    <nav>
+        <button onclick="window.location.href ='/' "><span class="navbarItem">{{ localization['nav_home'] }}</span></button>
+        {% if uType == 'student' %}
+            <button onclick="window.location.href ='/shop' "><span class="navbarItem">{{ localization['nav_shop'] }}</span></button>
+        {% elif uType == 'teacher' %}
+            <button onclick="window.location.href ='/add_course' "><span class="navbarItem">{{ localization['nav_create'] }}</span></button>
+        {% endif %}
+        <!-- <button onclick="window.location.href ='/' "><span class="navbarItem">Chat</span></button>
+        <button onclick="window.location.href ='/' "><span class="navbarItem">Calendar</span></button> -->
+        <button onclick="window.location.href ='/user_{{uname}}_courses' "><span class="navbarItem">{{ localization['nav_myCourses'] }}</span></button>
+        <button onclick="showAccountOptions()"><span class="navbarItem">{{ localization['nav_account'] }}</span></button>
+        <div class="myAccount_options_container">
+            <p>{{ localization['nav_welcome_msg'] }}, {{user_name}}</p>
+            <div class="myAccount_menu" id="1234567890">
+                {% if uType == 'student' %}
+                    <button onclick="activate_course_inv('{{uname}}')">{{ localization['nav_reedem'] }}</button>
+                {% endif %}
+                <button id="settings_btn">{{ localization['nav_settings'] }}</button>
+                <button onclick="window.location.href ='/logout' ">{{ localization['nav_logout'] }}</button>
+            </div>
+        </div>
+    </nav>
+    <div id="inv_cr" class="flex_col flex_centered ">
+        <input type="text" id="uInv_code">
+        <button id="activate_btn">{{ localization['getCourse'] }}</button>
+    </div>
+</header>
+
+<dialog id="settings_menu">
+    <label for=""></label>
+    <form method="post" class="flex_col" action="/set_lang">
+        <br> <br> <br>
+        <select name="language" required>
+            <option value="">{{ localization['settings_lang'] }}</option>
+            <option value="en">English</option>
+            <option value="ro">Română</option>
+            <option value="ru">Русский</option>
+        </select>
+        <input type="submit" value="&LongRightArrow;">
+    </form>
+    <button id="close_settings">Close settings</button>
+</dialog>
+
+<style>
+    option[value='None']{text-align: center;}
+    .cursor {animation: fade 0.7s ease infinite}
+    @keyframes fade { 0%{opacity: 0;} 50%{opacity: 1;} 100%{opacity: 0;} }
+</style>
+
+<script>
+    
+    document.getElementById('settings_btn').addEventListener('click', function(){
+        document.getElementById('settings_menu').showModal()
+    })
+
+    document.getElementById('close_settings').addEventListener('click', function(){
+        document.getElementById('settings_menu').close()
+    })
+
+    var i = 0;
+    var h1_content = ['Please choose a display language!',
+                    'Vă rugăm să alegeți o limbă de afișare!',
+                    'Пожалуйста, выберите язык отображения!' ]
+    var textContainer = document.querySelector('h1');
+    var currentText = '';
+    var isDeleting = false;
+    var typingSpeed = 60;
+
+    var cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    cursor.textContent = '|';
+    
+    function type() {
+        if (i === h1_content.length) {
+            i = 0;
+        }
+        var text = h1_content[i];
+        if (isDeleting) {
+            currentText = text.substring(0, currentText.length - 1);
+            typingSpeed = 60
+        } else {
+            currentText = text.substring(0, currentText.length + 1);
+        }
+        textContainer.textContent = currentText;
+
+        if (!isDeleting && currentText === text) {
+            isDeleting = true;
+            typingSpeed = 2000;
+        } else if (isDeleting && currentText === '') {
+            isDeleting = false;
+            i++;
+            typingSpeed = 60;
+        }
+        setTimeout(type, typingSpeed);
+        textContainer.appendChild(cursor);
+    }
+    
+    type();
+</script>

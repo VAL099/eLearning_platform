@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/scripts.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  <!-- THIS IS FOR AJAX TO WORK! -->
+    <title>MenT0R</title>
+</head>
+<body class="front_page flex_col flex_centered" onload="quotesOnMainPage(); hideLoader()">
+    {% include "[fragment]nav_bar.html" %}
+    <main>
+    {% include "[fragment]loading.html" %}
+        <div class="flex_col flex_centered site_pr">
+            <h1>Mentor</h1>
+            <span id="quottes">First you learn then you remove the "L"</span>
+        </div>
+    </main>
+    {% if uType == 'student' %}
+        <div class="flex_col flex_centered shop_page" style="opacity: 0;" >
+            <h3>{{localization['index_sugestions']}}</h3>
+            <div class="shop_section" id="shop">
+                {% for item in recommended %}
+                <div class="shop_item" onclick="fullFillCourseDescription({{item[0]}})">
+                    <img src="data:image/png;base64,{{ item[2]}}">
+                    <p>{{ item[1] }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- COURSE DETAILS TEMPLATE -->
+        <div class="course_preview_section" id="course_preview">
+            <div class=" course_preview_content flex_col flex_centered">
+                <div class="shop_item">
+                    <img id="course_thumb">
+                    <p id="course_name"></p>
+                </div>
+                <form method="POST" id="buy_btn">
+                    <button>{{ localization['getCourse'] }}</button>
+                </form>
+                <hr> <h1>{{ localization['shop_description'] }}</h1> <hr>
+                <p id="course_description"></p>
+                <hr> <h1>{{ localization['shop_requirements'] }}</h1> <hr>
+                <p id="course_requirements"></p>
+            </div>
+        </div>
+    <script> setTimeout(function(){document.getElementsByClassName('shop_page')[0].style.opacity = 1}, 1500) </script>
+    {% endif %}
+</body>
+</html>

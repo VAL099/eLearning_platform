@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  <!-- THIS IS FOR AJAX TO WORK! -->
+    <script src="/static/js/scripts.js"></script>
+    <title>{{ course_name }}</title>
+    <script>
+        var multiChoiceQuestionOption = 1
+        function addVars(param){
+            if (multiChoiceQuestionOption > 9){
+                alert("{{ localization['var_nums_limit'] }}")
+            }
+            else{
+                const activeElement = event.target.parentElement.querySelector('.flex_col .flex_centered')
+                const newElement = document.createElement('div')
+                newElement.classList.add("flex_row", "flex_centered")
+                newElement.innerHTML= `
+                <input type="text" name="option_${param}_${multiChoiceQuestionOption}" placeholder="{{ localization['suptopic_multichoice_answer'] }}">
+                <input type="checkbox" name="checkbox_${param}_${multiChoiceQuestionOption}">`
+                activeElement.appendChild(newElement); multiChoiceQuestionOption++
+            }
+            
+        }
+    </script>
+</head>
+    <body class="course_page_body" onload="handleContentTypes(); highlightActiveCourse(); showAddItem2CourseMenu(); addOnElement({{localization}}); hideLoader()">
+        <div class="flex_col flex_centered" style="gap:0.3rem" id="course_pg_menu">
+            <a href="/user_{{uname}}_courses"><button class="course_page_btn bttttn_main" style="border: solid 3px #0AFBFB;">← {{ localization['course_page_home'] }}</button></a>
+            
+            {% if uType == 'teacher' %}
+                <button class="course_page_btn" id="tech_btn" >+ {{ localization['course_page_addBtn'] }} +</button>
+            {% endif %}
+            <button class="course_page_btn" id="tech_btn_student" onclick="showTestSubmits('{{uType}}','{{cId}}', '{{uname}}');">{{ localization['course_page_show_submits'] }}</button>
+
+            <p class="content_separator">{{ localization['course_page_theory'] }}</p>
+            
+            {% for item in theory %}
+                <button name="bnt4CourseContent" class="course_page_btn" id="{{ item[0] }}" onclick="loadTopicContent(this.id, '{{uType}}')">{{ item[1] }}</button>
+            {% endfor %}
+
+            <p class="content_separator">{{ localization['course_page_videos'] }}</p>
+            {% for item in vids %}
+                <button name="bnt4CourseContent" class="course_page_btn" id="{{ item[0] }}" onclick="loadVideoContent(this.id, '{{uType}}')">{{ item[1] }}</button>
+            {% endfor %}
+
+            <p class="content_separator">{{ localization['course_page_tasks'] }}</p>
+
+            {% for item in tasks %}
+                <button name="bnt4CourseContent" class="course_page_btn" id="{{ item[0] }}" onclick="loadTaskContent(this.id, '{{uType}}')">{{ item[1] }}</button>
+            {% endfor %}
+
+        </div>
+        <!-- COURSE CONTENT -->
+        <div class="flex_col topic_text_content" id="subTopicContent"></div>
+        
+        <!-- Add item menu -->
+        <div class="add_item_2_course" id="add_menu">
+            <div class="add_item_fragment">
+                <div class="choices">
+                    <div class="choice_item">
+                        <input type="radio" id="_op_course_topic">  
+                        <label for="_op_course_topic">{{ localization['add_content_topic'] }}</label>  
+                    </div>
+                    <div class="choice_item">
+                        <input type="radio" id="_op_video">
+                        <label for="_op_video">{{ localization['add_content_video'] }}</label>
+                    </div>
+                    <div class="choice_item">
+                        <input type="radio" id="_op_test">
+                        <label for="_op_test">{{ localization['add_content_task'] }}</label>
+                    </div>
+                </div>
+
+                <!-- Add test -->
+                <div class="hidden_element" id="test_form_section">
+                    <form id="test_form" action="add_task_{{ cId }}" method="post">
+                        <div class="flex_col flex_centered" style="gap: 1rem; margin-bottom: 1rem;">
+                            <input type="text" name="task_name" placeholder="{{ localization['add_content_title'] }}" class="tName" style="font-size: 16pt;" required>
+                            <div class="flex_col flex_centered" style="gap: 1rem" id="questions_section"></div>
+                            <input type="submit" class="disBtn" value="{{ localization['btn_create'] }}" id="creation_menu_btn_go" disabled>
+                        </div>
+                    </form>
+                    <div class="flex_row flex_centered add_menu_btns" style="gap: 1rem;">
+                        <button id="add_quizz_question">+ {{ localization['add_multichoice'] }} +</button>
+                        <button id="input_question">+ {{ localization['add_question'] }} +</button>
+                        <button id="add_upload_field">+ {{ localization['add_task'] }} +</button>
+                    </div>
+                </div>
+
+                <!-- Add topic -->
+                <div class="hidden_element" id="new_topic_form">
+                    <form method="post" action="/add_topic_{{ cId }}" enctype="multipart/form-data">
+                        <div class="flex_col flex_centered" style="gap: 2rem;">
+                            <input type="text" name="topic_name" placeholder="{{ localization['add_content_title'] }}" class="tName" style="font-size: 16pt;" required>
+                            <div class="flex_col flex_centered" id="topics_section" style="gap:2rem;"></div>
+                            <input type="submit" class="disBtn" value="{{ localization['btn_create'] }}" id="creation_menu_btn_go1" disabled>
+                        </div>
+                    </form>
+                    
+                    <br><div class="flex_row flex_centered" style="gap: 1rem;">
+                        <button id="add_subtopic">+ {{ localization['subtopic_add_more'] }} +</button>
+                    </div>
+                </div>
+
+                <!-- Add video -->
+                <div class="hidden_element" id="video_topic">
+                    <form method="post" action="/add_video_{{ cId }}" enctype="multipart/form-data">
+                        <div class="flex_col flex_centered" style="gap: 2rem;">
+                            <input type="text" name="topic_name" placeholder="{{ localization['add_content_title'] }}" class="tName" style="font-size: 16pt;" required>
+                            <div class="flex_col flex_centered" id="topics_section" style="gap:2rem;">
+                                <input type="file" name="topic_video" id="topic_video" required>
+                                <label for="topic_video" id="topic_video_label"> <i class="fa fa-cloud-upload" aria-hidden="true"></i> {{ localization['add_video'] }}</label>
+                                <textarea type="text" cols="60" rows="10" placeholder="{{ localization['subtopic_video_description'] }}" id="add_video_description" name="video_descr"></textarea>
+                            </div>
+                            <input type="submit" class="disBtn" value="{{ localization['btn_create'] }}" id="creation_menu_btn_go1">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <!-- {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <script>alert('{{ message }}');</script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %} -->
+        
+    <!-- {% include "[fragment]loading.html" %} -->
+    </body>
+    <script>
+        document.getElementById('topic_video').addEventListener('change', (event)=>{
+            document.getElementById('topic_video_label').textContent = event.target.files[0].name
+        })
+    </script>
+</html>
