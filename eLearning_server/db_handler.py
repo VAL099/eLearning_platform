@@ -152,8 +152,8 @@ def get_courses_by_category(category):
     return cursor.fetchall()
 
 def rm_video_from_s3(video_name): 
-    s3 = boto3.client('s3', aws_access_key_id='AKIAUTQSVRDQNROXLQ53', 
-                        aws_secret_access_key='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') 
+    s3 = boto3.client('s3', aws_access_key_id='', 
+                        aws_secret_access_key='') 
     s3.delete_object(Bucket='elearning-licence2023', Key=video_name) 
 
 def remove_course(cId):
